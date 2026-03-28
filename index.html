@@ -201,7 +201,7 @@
   }
 
   /* ===== アップロードエリア ===== */
-  .upload-area {
+  .upload-buttons {
     border: 2px dashed var(--main2);
     border-radius: 16px;
     padding: 28px 20px;
@@ -211,22 +211,24 @@
     background: linear-gradient(135deg, rgba(240,119,153,0.04), rgba(246,214,230,0.08));
   }
 
-  .theme-blue .upload-area {
+  .theme-blue .upload-buttons {
     background: linear-gradient(135deg, rgba(1,121,232,0.04), rgba(208,232,255,0.08));
   }
 
-  .upload-area:hover {
+  .upload-buttons:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px var(--shadow);
     border-color: var(--main);
+    background: var(--bg1);
   }
 
-  .camera-icon { width: 72px; height: 72px; margin: 0 auto 12px; display: block; }
+  .upload-btn-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--text-main);
+  }
 
-  .upload-area .text { font-size: 15px; color: var(--text-main); font-weight: bold; }
-  .upload-area .sub  { font-size: 12px; color: var(--text-hint); margin-top: 5px; }
-
-  #fileInput { display: none; }
+  #fileGallery { display: none; }
 
   .preview-wrap { position: relative; margin-top: 12px; }
   .preview-wrap img {
@@ -571,23 +573,23 @@
 
   <!-- 写真アップロード -->
   <div class="card">
-    <div class="card-title" id="label-step1">📸 ステップ1｜写真をアップロード</div>
-    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-      <svg class="camera-icon" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="16" y="6" width="40" height="60" rx="6" fill="var(--bg1)" stroke="var(--main)" stroke-width="2.5"/>
-        <rect x="28" y="60" width="16" height="3" rx="1.5" fill="var(--sub)"/>
-        <rect x="24" y="10" width="24" height="2" rx="1" fill="var(--sub)"/>
-        <circle cx="36" cy="36" r="12" fill="var(--main)" opacity="0.12" stroke="var(--main)" stroke-width="2"/>
-        <circle cx="36" cy="36" r="7" fill="white" stroke="var(--main)" stroke-width="2"/>
-        <circle cx="36" cy="36" r="4" fill="var(--main)" opacity="0.4"/>
-        <circle cx="38.5" cy="33.5" r="1.5" fill="white" opacity="0.8"/>
-        <circle cx="52" cy="22" r="3" fill="var(--accent)" opacity="0.8"/>
-        <circle cx="36" cy="57" r="3" fill="var(--main)" opacity="0.5"/>
+    <div class="card-title" id="label-step1">📸 ステップ1｜写真を選ぶ</div>
+
+    <div class="upload-buttons" id="uploadArea" onclick="document.getElementById('fileGallery').click()">
+      <svg viewBox="0 0 56 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:64px;height:64px;margin:0 auto 10px;display:block;">
+        <rect x="2" y="10" width="52" height="34" rx="6" fill="var(--bg1)" stroke="var(--main)" stroke-width="2"/>
+        <path d="M17 10 L21 3 H35 L39 10" stroke="var(--main)" stroke-width="2" stroke-linejoin="round" fill="var(--bg1)"/>
+        <circle cx="28" cy="28" r="9" fill="var(--main)" opacity="0.1" stroke="var(--main)" stroke-width="2"/>
+        <circle cx="28" cy="28" r="5" fill="white" stroke="var(--main)" stroke-width="2"/>
+        <circle cx="28" cy="28" r="2.5" fill="var(--main)" opacity="0.5"/>
+        <circle cx="30" cy="26" r="1" fill="white" opacity="0.9"/>
+        <circle cx="46" cy="16" r="2.5" fill="var(--accent)" opacity="0.8"/>
       </svg>
-      <div class="text" id="label-upload">ここをタップして写真を選ぶ</div>
-      <div class="sub" id="label-upload-sub">神社・城・街並み・石碑など何でもOK 🏯</div>
+      <div class="upload-btn-label" id="label-upload">ここをタップして写真を選ぶ</div>
+      <div style="font-size:12px;color:var(--text-hint);margin-top:5px;" id="label-upload-sub">神社・城・街並み・石碑など何でもOK 🏯</div>
     </div>
-    <input type="file" id="fileInput" accept="image/*" capture="environment">
+
+    <input type="file" id="fileGallery" accept="image/*">
     <div class="preview-wrap" id="previewWrap" style="display:none">
       <img id="previewImg" src="" alt="preview">
       <button class="remove-btn" onclick="removeImage()">✕</button>
@@ -670,7 +672,10 @@ let resultText   = '';
 const i18n = {
   ja: {
     tagline:       '写真を撮るだけで、その場所の歴史と見どころがわかる',
-    step1:         '📸 ステップ1｜写真をアップロード',
+    step1:         '📸 ステップ1｜写真を選ぶ',
+    camera:        '📷 カメラで撮影',
+    gallery:       '🖼️ 保存した写真から選ぶ',
+    orLabel:       'または',
     upload:        'ここをタップして写真を選ぶ',
     uploadSub:     '神社・城・街並み・石碑など何でもOK 🏯',
     step2:         '✏️ ステップ2｜補足情報（任意）',
@@ -697,7 +702,10 @@ const i18n = {
   },
   en: {
     tagline:       'Point your camera and discover the history of any place',
-    step1:         '📸 Step 1 | Upload a Photo',
+    step1:         '📸 Step 1 | Select a Photo',
+    camera:        '📷 Take a Photo',
+    gallery:       '🖼️ Choose from Gallery',
+    orLabel:       'or',
     upload:        'Tap here to select a photo',
     uploadSub:     'Shrines, castles, streets, monuments — anything works 🏯',
     step2:         '✏️ Step 2 | Additional Info (optional)',
@@ -724,7 +732,10 @@ const i18n = {
   },
   zh: {
     tagline:       '拍张照片，立刻了解这个地方的历史和看点',
-    step1:         '📸 第一步｜上传照片',
+    step1:         '📸 第一步｜选择照片',
+    camera:        '📷 拍摄照片',
+    gallery:       '🖼️ 从相册选择',
+    orLabel:       '或者',
     upload:        '点击这里选择照片',
     uploadSub:     '神社、城堡、街景、石碑等都可以 🏯',
     step2:         '✏️ 第二步｜补充信息（可选）',
@@ -755,8 +766,10 @@ const i18n = {
 function setLang(lang) {
   currentLang = lang;
   const t = i18n[lang];
-  document.getElementById('tagline').textContent         = t.tagline;
-  document.getElementById('label-step1').textContent     = t.step1;
+  document.getElementById('tagline').textContent          = t.tagline;
+  document.getElementById('label-step1').textContent      = t.step1;
+  document.getElementById('label-upload').textContent     = t.upload;
+  document.getElementById('label-upload-sub').textContent = t.uploadSub;
   document.getElementById('label-upload').textContent    = t.upload;
   document.getElementById('label-upload-sub').textContent = t.uploadSub;
   document.getElementById('label-step2').textContent     = t.step2;
@@ -795,24 +808,52 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ========== 画像選択 ==========
-document.getElementById('fileInput').addEventListener('change', function(e) {
-  const file = e.target.files[0];
+// ========== 画像選択（共通処理） ==========
+function handleFileSelect(file) {
   if (!file) return;
+  if (file.size > 20 * 1024 * 1024) {
+    showError('ファイルサイズが大きすぎます。別の写真をお試しください。');
+    return;
+  }
   selectedFile = file;
   const reader = new FileReader();
   reader.onload = function(ev) {
-    base64Data = ev.target.result.split(',')[1];
-    document.getElementById('previewImg').src = ev.target.result;
-    document.getElementById('previewWrap').style.display = 'block';
-    document.getElementById('uploadArea').style.display  = 'none';
+    const img = new Image();
+    img.onload = function() {
+      const MAX = 1280;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+        else       { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      base64Data = dataUrl.split(',')[1];
+      document.getElementById('previewImg').src = dataUrl;
+      document.getElementById('previewWrap').style.display = 'block';
+      document.getElementById('uploadArea').style.display  = 'none';
+      hideError();
+    };
+    img.onerror = function() {
+      showError('画像の読み込みに失敗しました。別の写真をお試しください。');
+      selectedFile = null;
+    };
+    img.src = ev.target.result;
+  };
+  reader.onerror = function() {
+    showError('ファイルの読み込みに失敗しました。別の写真をお試しください。');
+    selectedFile = null;
   };
   reader.readAsDataURL(file);
-});
+}
+
+document.getElementById('fileGallery').addEventListener('change', function(e) { handleFileSelect(e.target.files[0]); });
 
 function removeImage() {
   selectedFile = base64Data = null;
-  document.getElementById('fileInput').value = '';
+  document.getElementById('fileGallery').value = '';
   document.getElementById('previewWrap').style.display = 'none';
   document.getElementById('uploadArea').style.display  = 'block';
 }
@@ -912,6 +953,13 @@ async function analyze() {
 
   if (!base64Data) { showError(t.errNoImage); return; }
 
+  // base64サイズチェック（4MB超は警告）
+  const byteSize = Math.round(base64Data.length * 0.75);
+  if (byteSize > 4 * 1024 * 1024) {
+    showError('画像サイズが大きすぎます。もう少し小さい写真をお試しください。');
+    return;
+  }
+
   hideError();
   triggerFlash();
 
@@ -967,7 +1015,7 @@ If uncertain, add "it is believed that..." or similar.`,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           imageBase64: base64Data,
-          mediaType: selectedFile.type,
+          mediaType: 'image/jpeg',
           text: prompts[currentLang],
           language: currentLang
         })
