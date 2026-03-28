@@ -89,7 +89,13 @@
     font-size: 28px; font-weight: bold; letter-spacing: 2px;
     background: var(--btn-grad);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.2s;
+    user-select: none;
   }
+  .header .logo:hover { transform: scale(1.05); }
+  .header .logo:active { transform: scale(0.97); }
   .header .tagline { font-size: 13px; color: var(--text-sub); margin-top: 6px; }
 
   /* ===== 言語切替 ===== */
@@ -197,24 +203,117 @@
   .flash-overlay.active { opacity: 0.85; }
 
   /* ===== 花びらローディング ===== */
-  .loading { text-align: center; padding: 40px 20px; display: none; }
-  .sakura-container {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 100; overflow: hidden;
+  /* ===== ローディングアニメーション ===== */
+  .loading { text-align: center; padding: 40px 20px; display: none; position: relative; }
+
+  /* 地球 */
+  .globe-wrap {
+    width: 80px; height: 80px; margin: 0 auto 20px;
+    position: relative;
   }
-  .petal { position: absolute; top: -30px; animation: fall linear infinite; opacity: 0.85; }
-  @keyframes fall {
-    0%   { transform: translateY(-30px) rotate(0deg) translateX(0); opacity: 0.9; }
-    50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); }
-    100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; }
+
+  .globe {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%,
+      #5bc8f5 0%, #1a8fd1 40%, #0a5fa0 70%, #083d6b 100%);
+    box-shadow: inset -8px -8px 20px rgba(0,0,0,0.3),
+                0 4px 20px rgba(1,121,232,0.3);
+    animation: globeSpin 3s linear infinite;
+    position: relative;
+    overflow: hidden;
   }
-  .shutter-ring {
-    width: 60px; height: 60px; border: 4px solid var(--sub);
-    border-top-color: var(--main); border-radius: 50%;
-    animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+
+  /* 地球の経線 */
+  .globe::before {
+    content: '';
+    position: absolute;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 12px,
+        rgba(255,255,255,0.08) 12px,
+        rgba(255,255,255,0.08) 13px
+      );
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { color: var(--text-main); font-size: 15px; font-weight: bold; }
+
+  /* 地球の緯線 */
+  .globe::after {
+    content: '';
+    position: absolute;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 12px,
+        rgba(255,255,255,0.08) 12px,
+        rgba(255,255,255,0.08) 13px
+      );
+  }
+
+  @keyframes globeSpin {
+    0%   { box-shadow: inset -8px -8px 20px rgba(0,0,0,0.3), 0 4px 20px rgba(1,121,232,0.3); }
+    50%  { box-shadow: inset 8px -8px 20px rgba(0,0,0,0.2), 0 4px 30px rgba(1,121,232,0.5); }
+    100% { box-shadow: inset -8px -8px 20px rgba(0,0,0,0.3), 0 4px 20px rgba(1,121,232,0.3); }
+  }
+
+  /* 飛行機が地球の周りを回る */
+  .plane-orbit {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 110px; height: 110px;
+    margin: -55px 0 0 -55px;
+    animation: planeOrbit 2s linear infinite;
+  }
+
+  .plane-emoji {
+    position: absolute;
+    top: -10px; left: 50%;
+    font-size: 20px;
+    transform: translateX(-50%) rotate(90deg);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  @keyframes planeOrbit {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ピン落下アニメーション（結果表示時） */
+  .pin-drop {
+    position: fixed;
+    font-size: 36px;
+    z-index: 300;
+    pointer-events: none;
+    animation: pinDrop 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  }
+
+  @keyframes pinDrop {
+    0%   { transform: translateY(-80px) scale(1.4); opacity: 0; }
+    60%  { transform: translateY(8px) scale(0.95); opacity: 1; }
+    80%  { transform: translateY(-4px) scale(1.05); }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .pin-ripple {
+    position: fixed;
+    z-index: 299;
+    pointer-events: none;
+    animation: pinRipple 0.8s ease-out 0.4s forwards;
+    opacity: 0;
+  }
+
+  @keyframes pinRipple {
+    0%   { transform: scale(0); opacity: 0.6; }
+    100% { transform: scale(3); opacity: 0; }
+  }
+
+  .loading-text { color: var(--text-main); font-size: 15px; font-weight: bold; margin-top: 8px; }
   .loading-sub  { color: var(--text-hint); font-size: 12px; margin-top: 6px; }
 
   /* ===== 結果カード ===== */
@@ -374,7 +473,7 @@
 
   <!-- ヘッダー -->
   <div class="header">
-    <div class="logo">✈️ たびみっけ Global</div>
+    <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">✈️ たびみっけ Global</div>
     <div class="tagline" id="tagline">写真を撮るだけで、その場所の歴史と見どころがわかる</div>
   </div>
 
@@ -436,7 +535,12 @@
 
   <!-- ローディング -->
   <div class="loading" id="loading">
-    <div class="shutter-ring"></div>
+    <div class="globe-wrap">
+      <div class="globe"></div>
+      <div class="plane-orbit">
+        <div class="plane-emoji">✈️</div>
+      </div>
+    </div>
     <div class="loading-text" id="label-loading">📚 歴史を調べています...</div>
     <div class="loading-sub"  id="label-loading-sub">少々お待ちください🌸</div>
   </div>
@@ -467,7 +571,7 @@
 
 <script>
 // ========== 設定 ==========
-const WORKER_URL = 'https://tabi-mikkehtml.yymmatsu.workers.dev';
+const WORKER_URL  = 'https://tabi-mikke.yymmatsu.workers.dev';
 const STRIPE_URL  = 'https://buy.stripe.com/fZu9ASbCWbfn6SP7AUcV20e'; // ← StripeのURLに差し替え
 // APP_PWはWorkerの環境変数APP_PASSWORDで管理（HTMLには書かない）
 const FREE_LIMIT  = 3;
@@ -751,40 +855,46 @@ function triggerFlash() {
   setTimeout(() => o.classList.remove('active'), 120);
 }
 
-function startSakura() {
-  const c = document.getElementById('sakuraContainer');
-  c.innerHTML = '';
-  const petals = i18n[currentLang].petals;
-  sakuraInterval = setInterval(() => {
-    const p = document.createElement('div');
-    p.className = 'petal';
-    p.textContent = petals[Math.floor(Math.random() * petals.length)];
-    p.style.left = Math.random() * 100 + 'vw';
-    p.style.fontSize = (14 + Math.random() * 12) + 'px';
-    p.style.animationDuration = (3 + Math.random() * 3) + 's';
-    c.appendChild(p);
-    setTimeout(() => p.remove(), 6000);
-  }, 300);
-}
-
-function stopSakura() {
-  if (sakuraInterval) { clearInterval(sakuraInterval); sakuraInterval = null; }
-  setTimeout(() => { document.getElementById('sakuraContainer').innerHTML = ''; }, 3000);
-}
+function startSakura() { /* 地球アニメーションに統合済み */ }
+function stopSakura()  { /* 地球アニメーションに統合済み */ }
 
 function triggerSparkles() {
-  const sp = ['✨','⭐','🌟','💫','✨','🌸'];
-  for (let i = 0; i < 12; i++) {
+  // ピン落下
+  const pin = document.createElement('div');
+  pin.className = 'pin-drop';
+  pin.textContent = '📍';
+  pin.style.left  = '50vw';
+  pin.style.top   = '40vh';
+  pin.style.transform = 'translateX(-50%)';
+  document.body.appendChild(pin);
+
+  // 波紋
+  const ripple = document.createElement('div');
+  ripple.className = 'pin-ripple';
+  ripple.style.left   = 'calc(50vw - 16px)';
+  ripple.style.top    = 'calc(40vh + 28px)';
+  ripple.style.width  = '32px';
+  ripple.style.height = '16px';
+  ripple.style.borderRadius = '50%';
+  ripple.style.background = 'rgba(1,121,232,0.3)';
+  document.body.appendChild(ripple);
+
+  setTimeout(() => pin.remove(), 1200);
+  setTimeout(() => ripple.remove(), 1200);
+
+  // キラキラ
+  const sp = ['✨','⭐','🌟','💫'];
+  for (let i = 0; i < 8; i++) {
     setTimeout(() => {
       const s = document.createElement('div');
       s.className = 'sparkle';
       s.textContent = sp[Math.floor(Math.random() * sp.length)];
-      s.style.left = (20 + Math.random() * 60) + 'vw';
-      s.style.top  = (30 + Math.random() * 40) + 'vh';
-      s.style.fontSize = (16 + Math.random() * 14) + 'px';
+      s.style.left = (30 + Math.random() * 40) + 'vw';
+      s.style.top  = (30 + Math.random() * 30) + 'vh';
+      s.style.fontSize = (14 + Math.random() * 12) + 'px';
       document.body.appendChild(s);
       setTimeout(() => s.remove(), 1200);
-    }, i * 80);
+    }, 200 + i * 80);
   }
 }
 
