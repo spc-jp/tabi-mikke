@@ -770,10 +770,6 @@ document.getElementById('gatePw').addEventListener('keydown', function(e) {
 // ========== 画像選択 ==========
 function handleFileSelect(file) {
   if (!file) return;
-  if (file.size > 100 * 1024 * 1024) {
-    showError('ファイルサイズが大きすぎます。別の写真をお試しください。');
-    return;
-  }
   selectedFile = file;
   const reader = new FileReader();
   reader.onload = function(ev) {
@@ -788,7 +784,7 @@ function handleFileSelect(file) {
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
       base64Data = dataUrl.split(',')[1];
       document.getElementById('previewImg').src = dataUrl;
       document.getElementById('previewWrap').style.display = 'block';
@@ -906,12 +902,6 @@ async function analyze() {
   // ===== 無料回数チェック =====
   if (!unlocked && useCount >= FREE_LIMIT) {
     openGate();
-    return;
-  }
-
-  const byteSize = Math.round(base64Data.length * 0.75);
-  if (byteSize > 5 * 1024 * 1024) {
-    showError('画像サイズが大きすぎます。もう少し小さい写真をお試しください。');
     return;
   }
 
