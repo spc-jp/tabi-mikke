@@ -9,104 +9,113 @@
 
   body {
     font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-    background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
+    background: linear-gradient(160deg, #fff0f5 0%, #fde8f0 40%, #fff8e7 100%);
     min-height: 100vh;
     padding: 20px;
+    overflow-x: hidden;
   }
 
   .container {
     max-width: 640px;
     margin: 0 auto;
+    position: relative;
   }
 
-  /* ヘッダー */
+  /* ===== ヘッダー ===== */
   .header {
     text-align: center;
-    padding: 30px 0 20px;
+    padding: 30px 0 24px;
   }
 
   .header .logo {
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
-    color: #0179E8;
+    background: linear-gradient(135deg, #F07799, #D0A900);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     letter-spacing: 2px;
-  }
-
-  .header .logo span {
-    color: #225AD3;
   }
 
   .header .tagline {
     font-size: 13px;
-    color: #666;
+    color: #b06080;
     margin-top: 6px;
   }
 
   .header .badge {
     display: inline-block;
-    background: #0179E8;
+    background: linear-gradient(135deg, #F07799, #f0a0bb);
     color: white;
     font-size: 11px;
-    padding: 3px 10px;
+    padding: 4px 14px;
     border-radius: 20px;
     margin-top: 8px;
+    letter-spacing: 1px;
   }
 
-  /* カード */
+  /* ===== カード ===== */
   .card {
-    background: white;
-    border-radius: 16px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 20px;
     padding: 24px;
     margin-bottom: 16px;
-    box-shadow: 0 2px 12px rgba(1,121,232,0.08);
+    box-shadow: 0 4px 20px rgba(240,119,153,0.12);
+    border: 1px solid rgba(240,119,153,0.15);
+    backdrop-filter: blur(8px);
   }
 
   .card-title {
     font-size: 14px;
     font-weight: bold;
-    color: #225AD3;
+    color: #F07799;
     margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 6px;
   }
 
-  /* 写真アップロード */
+  /* ===== アップロードエリア ===== */
   .upload-area {
-    border: 2px dashed #0179E8;
-    border-radius: 12px;
-    padding: 30px 20px;
+    border: 2px dashed #f0a0bb;
+    border-radius: 16px;
+    padding: 28px 20px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
-    background: #f8fbff;
+    transition: all 0.3s;
+    background: linear-gradient(135deg, rgba(240,119,153,0.05), rgba(246,214,230,0.1));
+    position: relative;
+    overflow: hidden;
   }
 
   .upload-area:hover {
-    background: #eef6ff;
-    border-color: #225AD3;
+    background: linear-gradient(135deg, rgba(240,119,153,0.1), rgba(246,214,230,0.2));
+    border-color: #F07799;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(240,119,153,0.2);
   }
 
-  .upload-area .icon {
-    font-size: 40px;
-    margin-bottom: 8px;
+  /* スマホカメラSVGアイコン */
+  .camera-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 12px;
+    display: block;
   }
 
   .upload-area .text {
-    font-size: 14px;
-    color: #0179E8;
+    font-size: 15px;
+    color: #F07799;
     font-weight: bold;
   }
 
   .upload-area .sub {
     font-size: 12px;
-    color: #999;
-    margin-top: 4px;
+    color: #c08098;
+    margin-top: 5px;
   }
 
-  #fileInput {
-    display: none;
-  }
+  #fileInput { display: none; }
 
   .preview-wrap {
     position: relative;
@@ -115,139 +124,248 @@
 
   .preview-wrap img {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 12px;
     max-height: 280px;
     object-fit: cover;
+    box-shadow: 0 4px 16px rgba(240,119,153,0.2);
   }
 
   .preview-wrap .remove-btn {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(240,119,153,0.85);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     font-size: 14px;
+    backdrop-filter: blur(4px);
   }
 
-  /* テキスト入力 */
+  /* ===== テキスト ===== */
   textarea {
     width: 100%;
-    border: 1px solid #dde8f5;
-    border-radius: 10px;
+    border: 1.5px solid #f6d6e6;
+    border-radius: 12px;
     padding: 12px;
     font-size: 14px;
     font-family: inherit;
     resize: none;
     outline: none;
     transition: border-color 0.2s;
-    color: #333;
-    background: #f8fbff;
+    color: #444;
+    background: rgba(255,255,255,0.8);
     line-height: 1.6;
   }
 
   textarea:focus {
-    border-color: #0179E8;
+    border-color: #F07799;
     background: white;
   }
 
   .char-hint {
     font-size: 11px;
-    color: #aaa;
+    color: #c0a0b0;
     text-align: right;
     margin-top: 4px;
   }
 
-  /* ボタン */
+  /* ===== ボタン ===== */
   .btn-main {
     display: block;
     width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #0179E8, #225AD3);
+    padding: 18px;
+    background: linear-gradient(135deg, #F07799 0%, #f0a0bb 50%, #D0A900 100%);
+    background-size: 200% 200%;
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 16px;
+    border-radius: 14px;
+    font-size: 17px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s;
     letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(240,119,153,0.35);
   }
 
-  .btn-main:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(1,121,232,0.4);
+  .btn-main:hover:not(:disabled) {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(240,119,153,0.5);
   }
 
   .btn-main:disabled {
-    background: #ccc;
+    background: linear-gradient(135deg, #e0c0c8, #d0c0b0);
     transform: none;
     box-shadow: none;
     cursor: not-allowed;
   }
 
-  /* ローディング */
-  .loading {
-    text-align: center;
-    padding: 30px;
-    display: none;
+  /* シャッターフラッシュ */
+  .flash-overlay {
+    position: fixed;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.05s;
   }
 
-  .loading .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #e0ecff;
-    border-top-color: #0179E8;
+  .flash-overlay.active {
+    opacity: 0.85;
+  }
+
+  /* ===== 桜ローディング ===== */
+  .loading {
+    text-align: center;
+    padding: 40px 20px;
+    display: none;
+    position: relative;
+  }
+
+  .sakura-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .petal {
+    position: absolute;
+    top: -30px;
+    font-size: 18px;
+    animation: fall linear infinite;
+    opacity: 0.85;
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-30px) rotate(0deg) translateX(0);
+      opacity: 0.9;
+    }
+    50% {
+      transform: translateY(50vh) rotate(180deg) translateX(30px);
+    }
+    100% {
+      transform: translateY(110vh) rotate(360deg) translateX(-20px);
+      opacity: 0;
+    }
+  }
+
+  .loading-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .camera-shutter {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 16px;
+    position: relative;
+  }
+
+  .shutter-ring {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #f6d6e6;
+    border-top-color: #F07799;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-    margin: 0 auto 14px;
+  }
+
+  .shutter-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #F07799, #D0A900);
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
   }
 
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
 
-  .loading .loading-text {
-    color: #0179E8;
-    font-size: 14px;
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
   }
 
-  /* 結果表示 */
+  .loading-text {
+    color: #F07799;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 4px;
+  }
+
+  .loading-sub {
+    color: #c08098;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+
+  /* ===== 結果カード ===== */
   .result-card {
     display: none;
-    background: white;
-    border-radius: 16px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 20px;
     padding: 24px;
     margin-bottom: 16px;
-    box-shadow: 0 2px 12px rgba(1,121,232,0.08);
-    border-left: 4px solid #0179E8;
+    box-shadow: 0 4px 24px rgba(240,119,153,0.15);
+    border: 1.5px solid rgba(240,119,153,0.2);
+    position: relative;
+    overflow: hidden;
   }
 
-  .result-card .result-header {
-    font-size: 13px;
-    color: #0179E8;
+  .result-card::before {
+    content: '🌸';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 60px;
+    opacity: 0.06;
+  }
+
+  .result-header {
+    font-size: 14px;
+    color: #F07799;
     font-weight: bold;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     display: flex;
     align-items: center;
     gap: 6px;
-  }
-
-  .result-content {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.9;
-    white-space: pre-wrap;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f6d6e6;
   }
 
   .result-section {
     margin-bottom: 18px;
     padding-bottom: 18px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #fde8f0;
+    animation: fadeUp 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .result-section:nth-child(1) { animation-delay: 0.1s; }
+  .result-section:nth-child(2) { animation-delay: 0.3s; }
+  .result-section:nth-child(3) { animation-delay: 0.5s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .result-section:last-child {
@@ -256,31 +374,45 @@
     border-bottom: none;
   }
 
-  .result-section .section-label {
+  .section-label {
     font-size: 13px;
     font-weight: bold;
-    color: #225AD3;
+    color: #D0A900;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
     gap: 4px;
   }
 
-  .result-section .section-body {
+  .section-body {
     font-size: 14px;
     color: #444;
-    line-height: 1.8;
+    line-height: 1.9;
   }
 
-  /* リセットボタン */
+  /* キラキラエフェクト */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 200;
+    font-size: 20px;
+    animation: sparkleAnim 1.2s ease-out forwards;
+  }
+
+  @keyframes sparkleAnim {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-60px) scale(0.3); }
+  }
+
+  /* ===== リセットボタン ===== */
   .btn-reset {
     display: block;
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     background: white;
-    color: #0179E8;
-    border: 2px solid #0179E8;
-    border-radius: 12px;
+    color: #F07799;
+    border: 2px solid #F07799;
+    border-radius: 14px;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
@@ -289,61 +421,86 @@
   }
 
   .btn-reset:hover {
-    background: #eef6ff;
+    background: #fff0f5;
   }
 
-  /* フッター */
-  .footer {
-    text-align: center;
-    padding: 20px 0 30px;
-    font-size: 12px;
-    color: #aaa;
-  }
-
-  .footer a {
-    color: #0179E8;
-    text-decoration: none;
-  }
-
-  /* エラー */
+  /* ===== エラー ===== */
   .error-msg {
-    background: #fff0f0;
-    border: 1px solid #ffcccc;
-    color: #cc0000;
-    border-radius: 10px;
+    background: #fff0f5;
+    border: 1px solid #f6d6e6;
+    color: #c06080;
+    border-radius: 12px;
     padding: 12px 16px;
     font-size: 13px;
     margin-bottom: 12px;
     display: none;
   }
 
-  /* 言語バッジ（将来対応） */
   .lang-note {
     font-size: 11px;
-    color: #999;
+    color: #c0a0b0;
     text-align: center;
-    margin-top: 8px;
+    margin-top: 10px;
+  }
+
+  /* ===== フッター ===== */
+  .footer {
+    text-align: center;
+    padding: 20px 0 30px;
+    font-size: 12px;
+    color: #c0a0b0;
+  }
+
+  .footer a {
+    color: #F07799;
+    text-decoration: none;
   }
 </style>
 </head>
 <body>
 
+<!-- シャッターフラッシュ -->
+<div class="flash-overlay" id="flashOverlay"></div>
+
+<!-- 桜の花びらコンテナ -->
+<div class="sakura-container" id="sakuraContainer"></div>
+
 <div class="container">
 
   <!-- ヘッダー -->
   <div class="header">
-    <div class="logo">✈️ たびみっけ <span>Global</span></div>
+    <div class="logo">✈️ たびみっけ Global</div>
     <div class="tagline">写真を撮るだけで、その場所の歴史と見どころがわかる</div>
-    <div class="badge">🇯🇵 日本語版</div>
+    <div class="badge">🌸 日本語版</div>
   </div>
 
   <!-- 写真アップロード -->
   <div class="card">
     <div class="card-title">📸 ステップ1｜写真をアップロード</div>
     <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-      <div class="icon">🏯</div>
+
+      <!-- スマホカメラ SVGアイコン -->
+      <svg class="camera-icon" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- スマホ本体 -->
+        <rect x="16" y="6" width="40" height="60" rx="6" fill="#fff0f5" stroke="#F07799" stroke-width="2.5"/>
+        <!-- ホームバー -->
+        <rect x="28" y="60" width="16" height="3" rx="1.5" fill="#f6d6e6"/>
+        <!-- カメラ上部バー -->
+        <rect x="24" y="10" width="24" height="2" rx="1" fill="#f6d6e6"/>
+        <!-- カメラ本体（丸）-->
+        <circle cx="36" cy="36" r="12" fill="#F07799" opacity="0.15" stroke="#F07799" stroke-width="2"/>
+        <!-- レンズ -->
+        <circle cx="36" cy="36" r="7" fill="white" stroke="#F07799" stroke-width="2"/>
+        <circle cx="36" cy="36" r="4" fill="#F07799" opacity="0.4"/>
+        <circle cx="38.5" cy="33.5" r="1.5" fill="white" opacity="0.8"/>
+        <!-- フラッシュ -->
+        <circle cx="52" cy="22" r="3" fill="#D0A900" opacity="0.8"/>
+        <!-- シャッターボタン -->
+        <circle cx="36" cy="57" r="3" fill="#F07799" opacity="0.5"/>
+      </svg>
+
       <div class="text">ここをタップして写真を選ぶ</div>
-      <div class="sub">神社・城・街並み・石碑など何でもOK</div>
+      <div class="sub">神社・城・街並み・石碑など何でもOK 🏯</div>
     </div>
     <input type="file" id="fileInput" accept="image/*" capture="environment">
     <div class="preview-wrap" id="previewWrap" style="display:none">
@@ -356,7 +513,7 @@
   <div class="card">
     <div class="card-title">✏️ ステップ2｜補足情報（任意）</div>
     <textarea id="userText" rows="3" placeholder="例：京都の神社です／説明板に「江戸時代」と書いてあった／〇〇市にあります"></textarea>
-    <div class="char-hint">写真だけでもOK。補足があるとより正確になります</div>
+    <div class="char-hint">写真だけでもOK。補足があるとより正確になります🌸</div>
   </div>
 
   <!-- エラー -->
@@ -366,17 +523,23 @@
   <button class="btn-main" id="submitBtn" onclick="analyze()">
     🔍 この場所を調べる
   </button>
-  <div class="lang-note">※ 多言語対応版（English / 中文）は近日公開予定</div>
+  <div class="lang-note">🌍 多言語対応版（English / 中文）は近日公開予定</div>
 
   <!-- ローディング -->
   <div class="loading" id="loading">
-    <div class="spinner"></div>
-    <div class="loading-text">📚 歴史を調べています...<br>少々お待ちください</div>
+    <div class="loading-inner">
+      <div class="camera-shutter">
+        <div class="shutter-ring"></div>
+        <div class="shutter-dot"></div>
+      </div>
+      <div class="loading-text">📚 歴史を調べています...</div>
+      <div class="loading-sub">桜の花びらが舞う間、少々お待ちください🌸</div>
+    </div>
   </div>
 
   <!-- 結果 -->
   <div class="result-card" id="resultCard">
-    <div class="result-header">✅ 調査結果</div>
+    <div class="result-header">🌸 調査結果</div>
     <div id="resultContent"></div>
   </div>
 
@@ -394,21 +557,17 @@
 </div>
 
 <script>
-// ========================================
-// Worker URL（Cloudflare Workerに差し替え）
-// ========================================
 const WORKER_URL = 'https://tabi-mikke.yymmatsu.workers.dev';
 
 let selectedFile = null;
 let base64Data = null;
+let sakuraInterval = null;
 
 // 画像選択
 document.getElementById('fileInput').addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
-
   selectedFile = file;
-
   const reader = new FileReader();
   reader.onload = function(ev) {
     base64Data = ev.target.result.split(',')[1];
@@ -428,99 +587,138 @@ function removeImage() {
   document.getElementById('uploadArea').style.display = 'block';
 }
 
+// シャッターフラッシュ
+function triggerFlash() {
+  const overlay = document.getElementById('flashOverlay');
+  overlay.classList.add('active');
+  setTimeout(() => overlay.classList.remove('active'), 120);
+}
+
+// 桜の花びら開始
+function startSakura() {
+  const container = document.getElementById('sakuraContainer');
+  container.innerHTML = '';
+  const petals = ['🌸', '🌺', '🌷', '🌸', '🌸'];
+  sakuraInterval = setInterval(() => {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.fontSize = (14 + Math.random() * 12) + 'px';
+    petal.style.animationDuration = (3 + Math.random() * 3) + 's';
+    petal.style.animationDelay = (Math.random() * 1) + 's';
+    container.appendChild(petal);
+    setTimeout(() => petal.remove(), 6000);
+  }, 300);
+}
+
+// 桜停止
+function stopSakura() {
+  if (sakuraInterval) {
+    clearInterval(sakuraInterval);
+    sakuraInterval = null;
+  }
+  setTimeout(() => {
+    document.getElementById('sakuraContainer').innerHTML = '';
+  }, 3000);
+}
+
+// キラキラエフェクト
+function triggerSparkles() {
+  const sparkles = ['✨', '⭐', '🌟', '💫', '✨', '🌸'];
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+      s.style.left = (20 + Math.random() * 60) + 'vw';
+      s.style.top = (30 + Math.random() * 40) + 'vh';
+      s.style.fontSize = (16 + Math.random() * 14) + 'px';
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 1200);
+    }, i * 80);
+  }
+}
+
 // 解析実行
 async function analyze() {
   const userText = document.getElementById('userText').value.trim();
-
   if (!base64Data) {
     showError('写真をアップロードしてください 📸');
     return;
   }
 
   hideError();
-  showLoading(true);
-  document.getElementById('submitBtn').disabled = true;
-  document.getElementById('resultCard').style.display = 'none';
-  document.getElementById('resetBtn').style.display = 'none';
 
-  try {
-    const response = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        imageBase64: base64Data,
-        mediaType: selectedFile.type,
-        text: userText,
-        language: 'ja'
-      })
-    });
+  // シャッターフラッシュ
+  triggerFlash();
 
-    if (!response.ok) throw new Error('サーバーエラーが発生しました');
+  setTimeout(async () => {
+    showLoading(true);
+    startSakura();
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('resultCard').style.display = 'none';
+    document.getElementById('resetBtn').style.display = 'none';
 
-    const data = await response.json();
-    showResult(data.result);
+    try {
+      const response = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          imageBase64: base64Data,
+          mediaType: selectedFile.type,
+          text: userText,
+          language: 'ja'
+        })
+      });
 
-  } catch (err) {
-    showError('エラーが発生しました。時間をおいて再度お試しください。');
-    console.error(err);
-  } finally {
-    showLoading(false);
-    document.getElementById('submitBtn').disabled = false;
-  }
+      if (!response.ok) throw new Error('サーバーエラー');
+      const data = await response.json();
+      showResult(data.result);
+      triggerSparkles();
+
+    } catch (err) {
+      showError('エラーが発生しました。時間をおいて再度お試しください。');
+    } finally {
+      showLoading(false);
+      stopSakura();
+      document.getElementById('submitBtn').disabled = false;
+    }
+  }, 150);
 }
 
 // 結果表示
 function showResult(text) {
   const container = document.getElementById('resultContent');
-
-  // セクション分割して表示
   const sections = [
     { key: '場所名', icon: '📍' },
     { key: '歴史・背景', icon: '📖' },
     { key: 'おすすめポイント', icon: '⭐' }
   ];
 
+  const parts = text.split('◆').filter(s => s.trim());
   let html = '';
-  let remaining = text;
 
-  sections.forEach((s, i) => {
-    const nextKey = i < sections.length - 1 ? sections[i + 1].key : null;
-    let content = '';
-
-    const startIdx = remaining.indexOf('◆');
-    if (startIdx !== -1) {
-      const nextIdx = nextKey ? remaining.indexOf('◆', startIdx + 1) : -1;
-      if (nextIdx !== -1) {
-        content = remaining.substring(startIdx, nextIdx).trim();
-        remaining = remaining.substring(nextIdx);
-      } else {
-        content = remaining.substring(startIdx).trim();
-        remaining = '';
-      }
-      // ◆ラベル行を除く
-      const lines = content.split('\n');
+  if (parts.length >= 2) {
+    parts.forEach((part, i) => {
+      const lines = part.trim().split('\n');
       lines.shift();
-      content = lines.join('\n').trim();
-    }
-
-    if (content) {
-      html += `<div class="result-section">
-        <div class="section-label">${s.icon} ${s.key}</div>
-        <div class="section-body">${content.replace(/\n/g, '<br>')}</div>
-      </div>`;
-    }
-  });
-
-  // セクション分割できなかった場合はそのまま表示
-  if (!html) {
+      const content = lines.join('\n').trim();
+      const s = sections[i] || { key: '', icon: '🌸' };
+      if (content) {
+        html += `<div class="result-section">
+          <div class="section-label">${s.icon} ${s.key}</div>
+          <div class="section-body">${content.replace(/\n/g, '<br>')}</div>
+        </div>`;
+      }
+    });
+  } else {
     html = `<div class="section-body">${text.replace(/\n/g, '<br>')}</div>`;
   }
 
   container.innerHTML = html;
   document.getElementById('resultCard').style.display = 'block';
   document.getElementById('resetBtn').style.display = 'block';
-
-  // スクロール
   document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -548,6 +746,5 @@ function hideError() {
   document.getElementById('errorMsg').style.display = 'none';
 }
 </script>
-
 </body>
 </html>
