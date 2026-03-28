@@ -5,14 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>たびみっけ Global｜写真で調べる旅の歴史と見どころ</title>
 <style>
+  :root {
+    --main:    #F07799;
+    --main2:   #f0a0bb;
+    --sub:     #F6D6E6;
+    --accent:  #D0A900;
+    --bg1:     #fff0f5;
+    --bg2:     #fde8f0;
+    --bg3:     #fff8e7;
+    --text-main: #F07799;
+    --text-sub:  #b06080;
+    --text-hint: #c0a0b0;
+    --border:  rgba(240,119,153,0.2);
+    --shadow:  rgba(240,119,153,0.15);
+    --btn-grad: linear-gradient(135deg, #F07799 0%, #f0a0bb 50%, #D0A900 100%);
+  }
+
+  .theme-blue {
+    --main:    #0179E8;
+    --main2:   #4aa0f0;
+    --sub:     #d0e8ff;
+    --accent:  #225AD3;
+    --bg1:     #f0f7ff;
+    --bg2:     #e8f2ff;
+    --bg3:     #f0f4ff;
+    --text-main: #0179E8;
+    --text-sub:  #2060b0;
+    --text-hint: #80a0c0;
+    --border:  rgba(1,121,232,0.2);
+    --shadow:  rgba(1,121,232,0.12);
+    --btn-grad: linear-gradient(135deg, #0179E8 0%, #4aa0f0 50%, #225AD3 100%);
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-    background: linear-gradient(160deg, #fff0f5 0%, #fde8f0 40%, #fff8e7 100%);
+    background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 40%, var(--bg3) 100%);
     min-height: 100vh;
     padding: 20px;
     overflow-x: hidden;
+    transition: background 0.4s;
   }
 
   .container {
@@ -21,134 +54,211 @@
     position: relative;
   }
 
+  /* ===== 設定ボタン ===== */
+  .settings-btn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 500;
+    width: 44px;
+    height: 44px;
+    background: white;
+    border: 2px solid var(--main);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 2px 10px var(--shadow);
+    transition: all 0.2s;
+  }
+
+  .settings-btn:hover { transform: rotate(30deg); }
+
+  /* ===== 設定パネル ===== */
+  .settings-panel {
+    position: fixed;
+    top: 68px;
+    right: 16px;
+    z-index: 499;
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 24px var(--shadow);
+    border: 1px solid var(--border);
+    width: 200px;
+    display: none;
+  }
+
+  .settings-panel.open { display: block; }
+
+  .settings-panel .panel-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-main);
+    margin-bottom: 10px;
+  }
+
+  .theme-options {
+    display: flex;
+    gap: 10px;
+  }
+
+  .theme-opt {
+    flex: 1;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    padding: 8px 4px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 11px;
+    color: #666;
+    transition: all 0.2s;
+  }
+
+  .theme-opt:hover { border-color: #aaa; }
+  .theme-opt.active { border-color: var(--main); color: var(--text-main); font-weight: bold; }
+
+  .theme-opt .swatch {
+    width: 32px;
+    height: 18px;
+    border-radius: 6px;
+    margin: 0 auto 4px;
+  }
+
+  .swatch-pink { background: linear-gradient(135deg, #F07799, #D0A900); }
+  .swatch-blue { background: linear-gradient(135deg, #0179E8, #225AD3); }
+
   /* ===== ヘッダー ===== */
   .header {
     text-align: center;
-    padding: 30px 0 24px;
+    padding: 30px 0 20px;
   }
 
   .header .logo {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: bold;
-    background: linear-gradient(135deg, #F07799, #D0A900);
+    background: var(--btn-grad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: 2px;
+    transition: background 0.4s;
   }
 
   .header .tagline {
     font-size: 13px;
-    color: #b06080;
+    color: var(--text-sub);
     margin-top: 6px;
   }
 
-  .header .badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #F07799, #f0a0bb);
-    color: white;
-    font-size: 11px;
-    padding: 4px 14px;
-    border-radius: 20px;
-    margin-top: 8px;
-    letter-spacing: 1px;
+  /* ===== 言語切替（常時表示） ===== */
+  .lang-bar {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 18px;
   }
+
+  .lang-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 2px solid var(--main);
+    background: white;
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .lang-btn.active {
+    background: var(--main);
+    color: white;
+    box-shadow: 0 2px 10px var(--shadow);
+  }
+
+  .lang-btn:hover:not(.active) { background: var(--bg1); }
 
   /* ===== カード ===== */
   .card {
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.88);
     border-radius: 20px;
     padding: 24px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 20px rgba(240,119,153,0.12);
-    border: 1px solid rgba(240,119,153,0.15);
+    box-shadow: 0 4px 20px var(--shadow);
+    border: 1px solid var(--border);
     backdrop-filter: blur(8px);
+    transition: box-shadow 0.3s;
   }
 
   .card-title {
     font-size: 14px;
     font-weight: bold;
-    color: #F07799;
+    color: var(--text-main);
     margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
   }
 
   /* ===== アップロードエリア ===== */
   .upload-area {
-    border: 2px dashed #f0a0bb;
+    border: 2px dashed var(--main2);
     border-radius: 16px;
     padding: 28px 20px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s;
-    background: linear-gradient(135deg, rgba(240,119,153,0.05), rgba(246,214,230,0.1));
-    position: relative;
-    overflow: hidden;
+    background: linear-gradient(135deg, rgba(240,119,153,0.04), rgba(246,214,230,0.08));
+  }
+
+  .theme-blue .upload-area {
+    background: linear-gradient(135deg, rgba(1,121,232,0.04), rgba(208,232,255,0.08));
   }
 
   .upload-area:hover {
-    background: linear-gradient(135deg, rgba(240,119,153,0.1), rgba(246,214,230,0.2));
-    border-color: #F07799;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(240,119,153,0.2);
+    box-shadow: 0 6px 20px var(--shadow);
+    border-color: var(--main);
   }
 
-  /* スマホカメラSVGアイコン */
-  .camera-icon {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 12px;
-    display: block;
-  }
+  .camera-icon { width: 72px; height: 72px; margin: 0 auto 12px; display: block; }
 
-  .upload-area .text {
-    font-size: 15px;
-    color: #F07799;
-    font-weight: bold;
-  }
-
-  .upload-area .sub {
-    font-size: 12px;
-    color: #c08098;
-    margin-top: 5px;
-  }
+  .upload-area .text { font-size: 15px; color: var(--text-main); font-weight: bold; }
+  .upload-area .sub  { font-size: 12px; color: var(--text-hint); margin-top: 5px; }
 
   #fileInput { display: none; }
 
-  .preview-wrap {
-    position: relative;
-    margin-top: 12px;
-  }
-
+  .preview-wrap { position: relative; margin-top: 12px; }
   .preview-wrap img {
     width: 100%;
     border-radius: 12px;
     max-height: 280px;
     object-fit: cover;
-    box-shadow: 0 4px 16px rgba(240,119,153,0.2);
+    box-shadow: 0 4px 16px var(--shadow);
   }
 
   .preview-wrap .remove-btn {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 8px; right: 8px;
     background: rgba(240,119,153,0.85);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 30px; height: 30px;
     cursor: pointer;
     font-size: 14px;
-    backdrop-filter: blur(4px);
   }
 
-  /* ===== テキスト ===== */
+  /* ===== テキスト＋音声 ===== */
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
   textarea {
-    width: 100%;
-    border: 1.5px solid #f6d6e6;
+    flex: 1;
+    border: 1.5px solid var(--sub);
     border-radius: 12px;
     padding: 12px;
     font-size: 14px;
@@ -161,24 +271,76 @@
     line-height: 1.6;
   }
 
-  textarea:focus {
-    border-color: #F07799;
+  textarea:focus { border-color: var(--main); background: white; }
+
+  .mic-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
     background: white;
+    box-shadow: 0 2px 10px var(--shadow);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0px;
+    padding: 0;
+    position: relative;
+    overflow: visible;
   }
 
-  .char-hint {
-    font-size: 11px;
-    color: #c0a0b0;
-    text-align: right;
-    margin-top: 4px;
+  .mic-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px var(--shadow);
   }
 
-  /* ===== ボタン ===== */
+  .mic-btn .mic-svg { width: 26px; height: 26px; transition: all 0.2s; }
+  .mic-btn .mic-svg path,
+  .mic-btn .mic-svg rect,
+  .mic-btn .mic-svg circle { transition: fill 0.2s, stroke 0.2s; }
+
+  .mic-btn.recording {
+    background: var(--main);
+    animation: micPulse 1s ease-in-out infinite;
+  }
+
+  .mic-btn.recording .mic-svg path,
+  .mic-btn.recording .mic-svg rect { stroke: white !important; }
+  .mic-btn.recording .mic-svg .mic-body { fill: white !important; }
+
+  /* 録音中の波紋 */
+  .mic-btn.recording::before,
+  .mic-btn.recording::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--main);
+    animation: ripple 1.2s ease-out infinite;
+    opacity: 0;
+  }
+  .mic-btn.recording::after { animation-delay: 0.4s; }
+
+  @keyframes ripple {
+    0%   { width: 50px; height: 50px; opacity: 0.6; }
+    100% { width: 80px; height: 80px; opacity: 0; }
+  }
+
+  @keyframes micPulse {
+    0%, 100% { box-shadow: 0 4px 16px var(--shadow); }
+    50%       { box-shadow: 0 4px 24px var(--shadow); }
+  }
+
+  .char-hint { font-size: 11px; color: var(--text-hint); text-align: right; margin-top: 4px; }
+
+  /* ===== メインボタン ===== */
   .btn-main {
     display: block;
     width: 100%;
     padding: 18px;
-    background: linear-gradient(135deg, #F07799 0%, #f0a0bb 50%, #D0A900 100%);
+    background: var(--btn-grad);
     background-size: 200% 200%;
     color: white;
     border: none;
@@ -188,134 +350,65 @@
     cursor: pointer;
     transition: all 0.3s;
     letter-spacing: 1px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(240,119,153,0.35);
+    box-shadow: 0 4px 20px var(--shadow);
   }
 
   .btn-main:hover:not(:disabled) {
-    background-position: right center;
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(240,119,153,0.5);
+    box-shadow: 0 6px 24px var(--shadow);
   }
 
   .btn-main:disabled {
-    background: linear-gradient(135deg, #e0c0c8, #d0c0b0);
-    transform: none;
-    box-shadow: none;
-    cursor: not-allowed;
+    background: linear-gradient(135deg, #ddd, #ccc);
+    transform: none; box-shadow: none; cursor: not-allowed;
   }
 
-  /* シャッターフラッシュ */
+  /* ===== フラッシュ ===== */
   .flash-overlay {
-    position: fixed;
-    inset: 0;
-    background: white;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 9999;
+    position: fixed; inset: 0;
+    background: white; opacity: 0;
+    pointer-events: none; z-index: 9999;
     transition: opacity 0.05s;
   }
-
-  .flash-overlay.active {
-    opacity: 0.85;
-  }
+  .flash-overlay.active { opacity: 0.85; }
 
   /* ===== 桜ローディング ===== */
   .loading {
     text-align: center;
     padding: 40px 20px;
     display: none;
-    position: relative;
   }
 
   .sakura-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 100;
-    overflow: hidden;
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 100; overflow: hidden;
   }
 
   .petal {
-    position: absolute;
-    top: -30px;
-    font-size: 18px;
-    animation: fall linear infinite;
-    opacity: 0.85;
+    position: absolute; top: -30px;
+    animation: fall linear infinite; opacity: 0.85;
   }
 
   @keyframes fall {
-    0% {
-      transform: translateY(-30px) rotate(0deg) translateX(0);
-      opacity: 0.9;
-    }
-    50% {
-      transform: translateY(50vh) rotate(180deg) translateX(30px);
-    }
-    100% {
-      transform: translateY(110vh) rotate(360deg) translateX(-20px);
-      opacity: 0;
-    }
-  }
-
-  .loading-inner {
-    position: relative;
-    z-index: 1;
-  }
-
-  .camera-shutter {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 16px;
-    position: relative;
+    0%   { transform: translateY(-30px) rotate(0deg) translateX(0); opacity: 0.9; }
+    50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); }
+    100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; }
   }
 
   .shutter-ring {
-    width: 60px;
-    height: 60px;
-    border: 4px solid #f6d6e6;
-    border-top-color: #F07799;
+    width: 60px; height: 60px;
+    border: 4px solid var(--sub);
+    border-top-color: var(--main);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
   }
 
-  .shutter-dot {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #F07799, #D0A900);
-    border-radius: 50%;
-    animation: pulse 1s ease-in-out infinite;
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
-  }
-
-  .loading-text {
-    color: #F07799;
-    font-size: 15px;
-    font-weight: bold;
-    margin-top: 4px;
-  }
-
-  .loading-sub {
-    color: #c08098;
-    font-size: 12px;
-    margin-top: 6px;
-  }
+  .loading-text { color: var(--text-main); font-size: 15px; font-weight: bold; }
+  .loading-sub  { color: var(--text-hint); font-size: 12px; margin-top: 6px; }
 
   /* ===== 結果カード ===== */
   .result-card {
@@ -324,37 +417,46 @@
     border-radius: 20px;
     padding: 24px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 24px rgba(240,119,153,0.15);
-    border: 1.5px solid rgba(240,119,153,0.2);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .result-card::before {
-    content: '🌸';
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    font-size: 60px;
-    opacity: 0.06;
+    box-shadow: 0 4px 24px var(--shadow);
+    border: 1.5px solid var(--border);
+    position: relative; overflow: hidden;
   }
 
   .result-header {
     font-size: 14px;
-    color: #F07799;
+    color: var(--text-main);
     font-weight: bold;
     margin-bottom: 18px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
     padding-bottom: 12px;
-    border-bottom: 1px solid #f6d6e6;
+    border-bottom: 1px solid var(--sub);
   }
+
+  /* コピーボタン */
+  .copy-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--main);
+    background: white;
+    color: var(--text-main);
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .copy-btn:hover  { background: var(--bg1); }
+  .copy-btn.copied { background: var(--main); color: white; }
 
   .result-section {
     margin-bottom: 18px;
     padding-bottom: 18px;
-    border-bottom: 1px solid #fde8f0;
+    border-bottom: 1px solid var(--sub);
     animation: fadeUp 0.5s ease forwards;
     opacity: 0;
   }
@@ -368,34 +470,20 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .result-section:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-  }
+  .result-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 
   .section-label {
     font-size: 13px;
     font-weight: bold;
-    color: #D0A900;
+    color: var(--accent);
     margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
   }
 
-  .section-body {
-    font-size: 14px;
-    color: #444;
-    line-height: 1.9;
-  }
+  .section-body { font-size: 14px; color: #444; line-height: 1.9; }
 
-  /* キラキラエフェクト */
+  /* キラキラ */
   .sparkle {
-    position: fixed;
-    pointer-events: none;
-    z-index: 200;
-    font-size: 20px;
+    position: fixed; pointer-events: none; z-index: 200;
     animation: sparkleAnim 1.2s ease-out forwards;
   }
 
@@ -406,28 +494,24 @@
 
   /* ===== リセットボタン ===== */
   .btn-reset {
-    display: block;
-    width: 100%;
+    display: block; width: 100%;
     padding: 14px;
     background: white;
-    color: #F07799;
-    border: 2px solid #F07799;
+    color: var(--text-main);
+    border: 2px solid var(--main);
     border-radius: 14px;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 14px; font-weight: bold;
     cursor: pointer;
     transition: all 0.2s;
     margin-bottom: 16px;
   }
 
-  .btn-reset:hover {
-    background: #fff0f5;
-  }
+  .btn-reset:hover { background: var(--bg1); }
 
   /* ===== エラー ===== */
   .error-msg {
     background: #fff0f5;
-    border: 1px solid #f6d6e6;
+    border: 1px solid var(--sub);
     color: #c06080;
     border-radius: 12px;
     padding: 12px 16px;
@@ -436,84 +520,98 @@
     display: none;
   }
 
-  .lang-note {
-    font-size: 11px;
-    color: #c0a0b0;
-    text-align: center;
-    margin-top: 10px;
-  }
-
   /* ===== フッター ===== */
   .footer {
     text-align: center;
     padding: 20px 0 30px;
     font-size: 12px;
-    color: #c0a0b0;
+    color: var(--text-hint);
   }
 
-  .footer a {
-    color: #F07799;
-    text-decoration: none;
-  }
+  .footer a { color: var(--text-main); text-decoration: none; }
 </style>
 </head>
-<body>
+<body id="body">
 
-<!-- シャッターフラッシュ -->
+<!-- フラッシュ -->
 <div class="flash-overlay" id="flashOverlay"></div>
-
-<!-- 桜の花びらコンテナ -->
+<!-- 桜コンテナ -->
 <div class="sakura-container" id="sakuraContainer"></div>
+<!-- 設定ボタン -->
+<button class="settings-btn" onclick="toggleSettings()" title="配色設定">⚙️</button>
+<!-- 設定パネル -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="panel-title">🎨 配色を選ぶ</div>
+  <div class="theme-options">
+    <div class="theme-opt active" id="opt-pink" onclick="setTheme('pink')">
+      <div class="swatch swatch-pink"></div>
+      🌸 ピンク
+    </div>
+    <div class="theme-opt" id="opt-blue" onclick="setTheme('blue')">
+      <div class="swatch swatch-blue"></div>
+      💙 ブルー
+    </div>
+  </div>
+</div>
 
 <div class="container">
 
   <!-- ヘッダー -->
   <div class="header">
-    <div class="logo">✈️ たびみっけ Global</div>
-    <div class="tagline">写真を撮るだけで、その場所の歴史と見どころがわかる</div>
-    <div class="badge">🌸 日本語版</div>
+    <div class="logo" id="logoText">✈️ たびみっけ Global</div>
+    <div class="tagline" id="tagline">写真を撮るだけで、その場所の歴史と見どころがわかる</div>
+  </div>
+
+  <!-- 言語切替（常時表示） -->
+  <div class="lang-bar">
+    <button class="lang-btn active" id="lang-ja" onclick="setLang('ja')">🇯🇵 日本語</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')">🇺🇸 English</button>
+    <button class="lang-btn" id="lang-zh" onclick="setLang('zh')">🇨🇳 中文</button>
   </div>
 
   <!-- 写真アップロード -->
   <div class="card">
-    <div class="card-title">📸 ステップ1｜写真をアップロード</div>
+    <div class="card-title" id="label-step1">📸 ステップ1｜写真をアップロード</div>
     <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-
-      <!-- スマホカメラ SVGアイコン -->
       <svg class="camera-icon" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- スマホ本体 -->
-        <rect x="16" y="6" width="40" height="60" rx="6" fill="#fff0f5" stroke="#F07799" stroke-width="2.5"/>
-        <!-- ホームバー -->
-        <rect x="28" y="60" width="16" height="3" rx="1.5" fill="#f6d6e6"/>
-        <!-- カメラ上部バー -->
-        <rect x="24" y="10" width="24" height="2" rx="1" fill="#f6d6e6"/>
-        <!-- カメラ本体（丸）-->
-        <circle cx="36" cy="36" r="12" fill="#F07799" opacity="0.15" stroke="#F07799" stroke-width="2"/>
-        <!-- レンズ -->
-        <circle cx="36" cy="36" r="7" fill="white" stroke="#F07799" stroke-width="2"/>
-        <circle cx="36" cy="36" r="4" fill="#F07799" opacity="0.4"/>
+        <rect x="16" y="6" width="40" height="60" rx="6" fill="var(--bg1)" stroke="var(--main)" stroke-width="2.5"/>
+        <rect x="28" y="60" width="16" height="3" rx="1.5" fill="var(--sub)"/>
+        <rect x="24" y="10" width="24" height="2" rx="1" fill="var(--sub)"/>
+        <circle cx="36" cy="36" r="12" fill="var(--main)" opacity="0.12" stroke="var(--main)" stroke-width="2"/>
+        <circle cx="36" cy="36" r="7" fill="white" stroke="var(--main)" stroke-width="2"/>
+        <circle cx="36" cy="36" r="4" fill="var(--main)" opacity="0.4"/>
         <circle cx="38.5" cy="33.5" r="1.5" fill="white" opacity="0.8"/>
-        <!-- フラッシュ -->
-        <circle cx="52" cy="22" r="3" fill="#D0A900" opacity="0.8"/>
-        <!-- シャッターボタン -->
-        <circle cx="36" cy="57" r="3" fill="#F07799" opacity="0.5"/>
+        <circle cx="52" cy="22" r="3" fill="var(--accent)" opacity="0.8"/>
+        <circle cx="36" cy="57" r="3" fill="var(--main)" opacity="0.5"/>
       </svg>
-
-      <div class="text">ここをタップして写真を選ぶ</div>
-      <div class="sub">神社・城・街並み・石碑など何でもOK 🏯</div>
+      <div class="text" id="label-upload">ここをタップして写真を選ぶ</div>
+      <div class="sub" id="label-upload-sub">神社・城・街並み・石碑など何でもOK 🏯</div>
     </div>
     <input type="file" id="fileInput" accept="image/*" capture="environment">
     <div class="preview-wrap" id="previewWrap" style="display:none">
-      <img id="previewImg" src="" alt="プレビュー">
+      <img id="previewImg" src="" alt="preview">
       <button class="remove-btn" onclick="removeImage()">✕</button>
     </div>
   </div>
 
-  <!-- テキスト補足 -->
+  <!-- テキスト＋音声 -->
   <div class="card">
-    <div class="card-title">✏️ ステップ2｜補足情報（任意）</div>
-    <textarea id="userText" rows="3" placeholder="例：京都の神社です／説明板に「江戸時代」と書いてあった／〇〇市にあります"></textarea>
-    <div class="char-hint">写真だけでもOK。補足があるとより正確になります🌸</div>
+    <div class="card-title" id="label-step2">✏️ ステップ2｜補足情報（任意）</div>
+    <div class="input-row">
+      <textarea id="userText" rows="3" placeholder="例：京都の神社です／江戸時代と書いてあった／〇〇市にあります"></textarea>
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="音声入力">
+        <svg class="mic-svg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect class="mic-body" x="9" y="2" width="8" height="13" rx="4"
+            fill="var(--main)" opacity="0.15" stroke="var(--main)" stroke-width="1.8"/>
+          <rect x="11.5" y="4" width="3" height="4" rx="1.5" fill="var(--main)" opacity="0.3"/>
+          <path d="M5 13 C5 19 21 19 21 13" stroke="var(--main)" stroke-width="1.8"
+            stroke-linecap="round" fill="none"/>
+          <line x1="13" y1="19" x2="13" y2="23" stroke="var(--main)" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="9" y1="23" x2="17" y2="23" stroke="var(--main)" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="char-hint" id="label-hint">写真だけでもOK。補足があるとより正確になります🌸</div>
   </div>
 
   <!-- エラー -->
@@ -521,31 +619,30 @@
 
   <!-- 送信ボタン -->
   <button class="btn-main" id="submitBtn" onclick="analyze()">
-    🔍 この場所を調べる
+    <span id="label-btn">🔍 この場所を調べる</span>
   </button>
-  <div class="lang-note">🌍 多言語対応版（English / 中文）は近日公開予定</div>
 
   <!-- ローディング -->
   <div class="loading" id="loading">
-    <div class="loading-inner">
-      <div class="camera-shutter">
-        <div class="shutter-ring"></div>
-        <div class="shutter-dot"></div>
-      </div>
-      <div class="loading-text">📚 歴史を調べています...</div>
-      <div class="loading-sub">桜の花びらが舞う間、少々お待ちください🌸</div>
-    </div>
+    <div class="shutter-ring"></div>
+    <div class="loading-text" id="label-loading">📚 歴史を調べています...</div>
+    <div class="loading-sub" id="label-loading-sub">花びらが舞う間、少々お待ちください🌸</div>
   </div>
 
   <!-- 結果 -->
   <div class="result-card" id="resultCard">
-    <div class="result-header">🌸 調査結果</div>
+    <div class="result-header">
+      <span id="label-result">🌸 調査結果</span>
+      <button class="copy-btn" id="copyBtn" onclick="copyResult()">
+        📋 <span id="label-copy">コピー</span>
+      </button>
+    </div>
     <div id="resultContent"></div>
   </div>
 
   <!-- リセット -->
   <button class="btn-reset" id="resetBtn" style="display:none" onclick="resetAll()">
-    🔄 別の場所を調べる
+    <span id="label-reset">🔄 別の場所を調べる</span>
   </button>
 
   <!-- フッター -->
@@ -557,13 +654,148 @@
 </div>
 
 <script>
+// ========== 設定 ==========
 const WORKER_URL = 'https://tabi-mikke.yymmatsu.workers.dev';
 
 let selectedFile = null;
-let base64Data = null;
+let base64Data   = null;
 let sakuraInterval = null;
+let recognition  = null;
+let isRecording  = false;
+let currentLang  = 'ja';
+let currentTheme = 'pink';
+let resultText   = '';
 
-// 画像選択
+// ========== 多言語テキスト ==========
+const i18n = {
+  ja: {
+    tagline:       '写真を撮るだけで、その場所の歴史と見どころがわかる',
+    step1:         '📸 ステップ1｜写真をアップロード',
+    upload:        'ここをタップして写真を選ぶ',
+    uploadSub:     '神社・城・街並み・石碑など何でもOK 🏯',
+    step2:         '✏️ ステップ2｜補足情報（任意）',
+    placeholder:   '例：京都の神社です／江戸時代と書いてあった／〇〇市にあります',
+    hint:          '写真だけでもOK。補足があるとより正確になります🌸',
+    btn:           '🔍 この場所を調べる',
+    loading:       '📚 歴史を調べています...',
+    loadingSub:    '花びらが舞う間、少々お待ちください🌸',
+    result:        '🌸 調査結果',
+    copy:          'コピー',
+    copied:        'コピーしました！',
+    reset:         '🔄 別の場所を調べる',
+    errNoImage:    '写真をアップロードしてください 📸',
+    errServer:     'エラーが発生しました。時間をおいて再度お試しください。',
+    errMic:        '音声入力に対応していないブラウザです。',
+    micStart:      '音声入力中... もう一度タップで停止',
+    petals:        ['🌸','🌺','🌷','🌸','🌸'],
+    speechLang:    'ja-JP',
+    sections:      [
+      { key: '場所名',     icon: '📍' },
+      { key: '歴史・背景', icon: '📖' },
+      { key: 'おすすめポイント', icon: '⭐' }
+    ]
+  },
+  en: {
+    tagline:       'Point your camera and discover the history of any place',
+    step1:         '📸 Step 1 | Upload a Photo',
+    upload:        'Tap here to select a photo',
+    uploadSub:     'Shrines, castles, streets, monuments — anything works 🏯',
+    step2:         '✏️ Step 2 | Additional Info (optional)',
+    placeholder:   'e.g. A shrine in Kyoto / The sign says "Edo period" / Located in Nara',
+    hint:          'Photo alone is fine. Extra info improves accuracy 🌸',
+    btn:           '🔍 Discover this place',
+    loading:       '📚 Researching the history...',
+    loadingSub:    'Please wait a moment 🌸',
+    result:        '🌸 Results',
+    copy:          'Copy',
+    copied:        'Copied!',
+    reset:         '🔄 Try another place',
+    errNoImage:    'Please upload a photo first 📸',
+    errServer:     'An error occurred. Please try again later.',
+    errMic:        'Voice input is not supported on this browser.',
+    micStart:      'Listening... Tap again to stop',
+    petals:        ['🌸','🌺','🌷','🌸','🌸'],
+    speechLang:    'en-US',
+    sections:      [
+      { key: 'Place Name',       icon: '📍' },
+      { key: 'History',          icon: '📖' },
+      { key: 'Highlights',       icon: '⭐' }
+    ]
+  },
+  zh: {
+    tagline:       '拍张照片，立刻了解这个地方的历史和看点',
+    step1:         '📸 第一步｜上传照片',
+    upload:        '点击这里选择照片',
+    uploadSub:     '神社、城堡、街景、石碑等都可以 🏯',
+    step2:         '✏️ 第二步｜补充信息（可选）',
+    placeholder:   '例：京都的神社 / 说明牌上写着「江户时代」/ 位于奈良',
+    hint:          '只有照片也可以。补充信息有助于提高准确度🌸',
+    btn:           '🔍 查询这个地方',
+    loading:       '📚 正在查询历史...',
+    loadingSub:    '请稍候，花瓣飘落中🌸',
+    result:        '🌸 查询结果',
+    copy:          '复制',
+    copied:        '已复制！',
+    reset:         '🔄 查询其他地方',
+    errNoImage:    '请先上传照片 📸',
+    errServer:     '发生错误，请稍后再试。',
+    errMic:        '当前浏览器不支持语音输入。',
+    micStart:      '正在聆听...再次点击停止',
+    petals:        ['🌸','🌺','🌷','🌸','🌸'],
+    speechLang:    'zh-CN',
+    sections:      [
+      { key: '地点名称', icon: '📍' },
+      { key: '历史背景', icon: '📖' },
+      { key: '推荐看点', icon: '⭐' }
+    ]
+  }
+};
+
+// ========== 言語切替 ==========
+function setLang(lang) {
+  currentLang = lang;
+  const t = i18n[lang];
+  document.getElementById('tagline').textContent         = t.tagline;
+  document.getElementById('label-step1').textContent     = t.step1;
+  document.getElementById('label-upload').textContent    = t.upload;
+  document.getElementById('label-upload-sub').textContent = t.uploadSub;
+  document.getElementById('label-step2').textContent     = t.step2;
+  document.getElementById('userText').placeholder        = t.placeholder;
+  document.getElementById('label-hint').textContent      = t.hint;
+  document.getElementById('label-btn').textContent       = t.btn;
+  document.getElementById('label-loading').textContent   = t.loading;
+  document.getElementById('label-loading-sub').textContent = t.loadingSub;
+  document.getElementById('label-result').textContent    = t.result;
+  document.getElementById('label-copy').textContent      = t.copy;
+  document.getElementById('label-reset').textContent     = t.reset;
+
+  ['ja','en','zh'].forEach(l => {
+    document.getElementById('lang-'+l).classList.toggle('active', l === lang);
+  });
+}
+
+// ========== テーマ切替 ==========
+function setTheme(theme) {
+  currentTheme = theme;
+  document.getElementById('body').className = theme === 'blue' ? 'theme-blue' : '';
+  document.getElementById('opt-pink').classList.toggle('active', theme === 'pink');
+  document.getElementById('opt-blue').classList.toggle('active', theme === 'blue');
+}
+
+// ========== 設定パネル ==========
+function toggleSettings() {
+  document.getElementById('settingsPanel').classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('settingsPanel');
+  const btn   = document.querySelector('.settings-btn');
+  if (!panel.contains(e.target) && !btn.contains(e.target)) {
+    panel.classList.remove('open');
+  }
+});
+
+// ========== 画像選択 ==========
 document.getElementById('fileInput').addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -573,66 +805,99 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
     base64Data = ev.target.result.split(',')[1];
     document.getElementById('previewImg').src = ev.target.result;
     document.getElementById('previewWrap').style.display = 'block';
-    document.getElementById('uploadArea').style.display = 'none';
+    document.getElementById('uploadArea').style.display  = 'none';
   };
   reader.readAsDataURL(file);
 });
 
-// 画像削除
 function removeImage() {
-  selectedFile = null;
-  base64Data = null;
+  selectedFile = base64Data = null;
   document.getElementById('fileInput').value = '';
   document.getElementById('previewWrap').style.display = 'none';
-  document.getElementById('uploadArea').style.display = 'block';
+  document.getElementById('uploadArea').style.display  = 'block';
 }
 
-// シャッターフラッシュ
+// ========== 音声入力 ==========
+function toggleMic() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert(i18n[currentLang].errMic);
+    return;
+  }
+
+  if (isRecording) {
+    recognition.stop();
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = i18n[currentLang].speechLang;
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = function() {
+    isRecording = true;
+    document.getElementById('micBtn').classList.add('recording');
+    document.getElementById('micBtn').title = i18n[currentLang].micStart;
+  };
+
+  recognition.onresult = function(e) {
+    const transcript = e.results[0][0].transcript;
+    const ta = document.getElementById('userText');
+    ta.value = ta.value ? ta.value + ' ' + transcript : transcript;
+  };
+
+  recognition.onend = function() {
+    isRecording = false;
+    document.getElementById('micBtn').classList.remove('recording');
+    document.getElementById('micBtn').title = '音声入力';
+  };
+
+  recognition.onerror = function() {
+    isRecording = false;
+    document.getElementById('micBtn').classList.remove('recording');
+  };
+
+  recognition.start();
+}
+
+// ========== アニメーション ==========
 function triggerFlash() {
   const overlay = document.getElementById('flashOverlay');
   overlay.classList.add('active');
   setTimeout(() => overlay.classList.remove('active'), 120);
 }
 
-// 桜の花びら開始
 function startSakura() {
   const container = document.getElementById('sakuraContainer');
   container.innerHTML = '';
-  const petals = ['🌸', '🌺', '🌷', '🌸', '🌸'];
+  const petals = i18n[currentLang].petals;
   sakuraInterval = setInterval(() => {
-    const petal = document.createElement('div');
-    petal.className = 'petal';
-    petal.textContent = petals[Math.floor(Math.random() * petals.length)];
-    petal.style.left = Math.random() * 100 + 'vw';
-    petal.style.fontSize = (14 + Math.random() * 12) + 'px';
-    petal.style.animationDuration = (3 + Math.random() * 3) + 's';
-    petal.style.animationDelay = (Math.random() * 1) + 's';
-    container.appendChild(petal);
-    setTimeout(() => petal.remove(), 6000);
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random() * petals.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (14 + Math.random() * 12) + 'px';
+    p.style.animationDuration = (3 + Math.random() * 3) + 's';
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 6000);
   }, 300);
 }
 
-// 桜停止
 function stopSakura() {
-  if (sakuraInterval) {
-    clearInterval(sakuraInterval);
-    sakuraInterval = null;
-  }
-  setTimeout(() => {
-    document.getElementById('sakuraContainer').innerHTML = '';
-  }, 3000);
+  if (sakuraInterval) { clearInterval(sakuraInterval); sakuraInterval = null; }
+  setTimeout(() => { document.getElementById('sakuraContainer').innerHTML = ''; }, 3000);
 }
 
-// キラキラエフェクト
 function triggerSparkles() {
-  const sparkles = ['✨', '⭐', '🌟', '💫', '✨', '🌸'];
+  const sp = ['✨','⭐','🌟','💫','✨','🌸'];
   for (let i = 0; i < 12; i++) {
     setTimeout(() => {
       const s = document.createElement('div');
       s.className = 'sparkle';
-      s.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+      s.textContent = sp[Math.floor(Math.random() * sp.length)];
       s.style.left = (20 + Math.random() * 60) + 'vw';
-      s.style.top = (30 + Math.random() * 40) + 'vh';
+      s.style.top  = (30 + Math.random() * 40) + 'vh';
       s.style.fontSize = (16 + Math.random() * 14) + 'px';
       document.body.appendChild(s);
       setTimeout(() => s.remove(), 1200);
@@ -640,17 +905,14 @@ function triggerSparkles() {
   }
 }
 
-// 解析実行
+// ========== 解析実行 ==========
 async function analyze() {
+  const t = i18n[currentLang];
   const userText = document.getElementById('userText').value.trim();
-  if (!base64Data) {
-    showError('写真をアップロードしてください 📸');
-    return;
-  }
+
+  if (!base64Data) { showError(t.errNoImage); return; }
 
   hideError();
-
-  // シャッターフラッシュ
   triggerFlash();
 
   setTimeout(async () => {
@@ -658,7 +920,46 @@ async function analyze() {
     startSakura();
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('resultCard').style.display = 'none';
-    document.getElementById('resetBtn').style.display = 'none';
+    document.getElementById('resetBtn').style.display   = 'none';
+
+    // 言語別プロンプト
+    const prompts = {
+      ja: `この写真に写っている場所を調べてください。${userText ? '補足：' + userText : ''}
+以下の形式で日本語のみで回答。マークダウン・記号装飾は禁止。◆記号のみ使用。
+
+◆ 場所名（推定）
+◆ 歴史・背景
+◆ おすすめポイント
+・（見どころ1）
+・（見どころ2）
+・（見どころ3）
+
+不確かな場合は「〜と思われます」と添えてください。`,
+
+      en: `Please research the location shown in this photo.${userText ? ' Additional info: ' + userText : ''}
+Reply in English only using this format. No markdown. Use ◆ only.
+
+◆ Place Name (estimated)
+◆ History & Background
+◆ Highlights
+・(point 1)
+・(point 2)
+・(point 3)
+
+If uncertain, add "it is believed that..." or similar.`,
+
+      zh: `请查询照片中显示的地点。${userText ? '补充信息：' + userText : ''}
+请仅用中文回答，使用以下格式。禁止使用Markdown。仅使用◆符号。
+
+◆ 地点名称（推测）
+◆ 历史背景
+◆ 推荐看点
+・（看点1）
+・（看点2）
+・（看点3）
+
+如不确定，请加上"据推测…"等表达。`
+    };
 
     try {
       const response = await fetch(WORKER_URL, {
@@ -667,18 +968,19 @@ async function analyze() {
         body: JSON.stringify({
           imageBase64: base64Data,
           mediaType: selectedFile.type,
-          text: userText,
-          language: 'ja'
+          text: prompts[currentLang],
+          language: currentLang
         })
       });
 
-      if (!response.ok) throw new Error('サーバーエラー');
+      if (!response.ok) throw new Error();
       const data = await response.json();
-      showResult(data.result);
+      resultText = data.result;
+      showResult(resultText);
       triggerSparkles();
 
-    } catch (err) {
-      showError('エラーが発生しました。時間をおいて再度お試しください。');
+    } catch {
+      showError(t.errServer);
     } finally {
       showLoading(false);
       stopSakura();
@@ -687,17 +989,12 @@ async function analyze() {
   }, 150);
 }
 
-// 結果表示
+// ========== 結果表示 ==========
 function showResult(text) {
   const container = document.getElementById('resultContent');
-  const sections = [
-    { key: '場所名', icon: '📍' },
-    { key: '歴史・背景', icon: '📖' },
-    { key: 'おすすめポイント', icon: '⭐' }
-  ];
-
-  const parts = text.split('◆').filter(s => s.trim());
-  let html = '';
+  const sections  = i18n[currentLang].sections;
+  const parts     = text.split('◆').filter(s => s.trim());
+  let html        = '';
 
   if (parts.length >= 2) {
     parts.forEach((part, i) => {
@@ -718,16 +1015,34 @@ function showResult(text) {
 
   container.innerHTML = html;
   document.getElementById('resultCard').style.display = 'block';
-  document.getElementById('resetBtn').style.display = 'block';
+  document.getElementById('resetBtn').style.display   = 'block';
+  document.getElementById('copyBtn').classList.remove('copied');
+  document.getElementById('label-copy').textContent   = i18n[currentLang].copy;
   document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// リセット
+// ========== コピー ==========
+function copyResult() {
+  if (!resultText) return;
+  navigator.clipboard.writeText(resultText).then(() => {
+    const btn   = document.getElementById('copyBtn');
+    const label = document.getElementById('label-copy');
+    btn.classList.add('copied');
+    label.textContent = i18n[currentLang].copied;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      label.textContent = i18n[currentLang].copy;
+    }, 2000);
+  });
+}
+
+// ========== リセット ==========
 function resetAll() {
   removeImage();
   document.getElementById('userText').value = '';
   document.getElementById('resultCard').style.display = 'none';
-  document.getElementById('resetBtn').style.display = 'none';
+  document.getElementById('resetBtn').style.display   = 'none';
+  resultText = '';
   hideError();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
