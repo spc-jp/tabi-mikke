@@ -469,7 +469,7 @@
 // ========== 設定 ==========
 const WORKER_URL  = 'https://tabi-mikke.yymmatsu.workers.dev';
 const STRIPE_URL  = 'https://buy.stripe.com/xxxxxxxx'; // ← StripeのURLに差し替え
-const APP_PW      = 'tabi2025';                         // ← パスワードに差し替え
+// APP_PWはWorkerの環境変数APP_PASSWORDで管理（HTMLには書かない）
 const FREE_LIMIT  = 3;
 
 let selectedFile  = null;
@@ -624,14 +624,39 @@ function closeGate() {
 
 function checkPassword() {
   const pw = document.getElementById('gatePw').value.trim();
-  if (pw === APP_PW) {
-    unlocked = true;
-    localStorage.setItem('tabi_unlocked', '1');
-    closeGate();
-    analyze();
-  } else {
-    document.getElementById('gateErr').style.display = 'block';
-  }
+  if (!pw) return;
+
+  const errEl  = document.getElementById('gateErr');
+  const enterBtn = document.querySelector('.gate-enter-btn');
+  errEl.style.display = 'none';
+  enterBtn.textContent = '確認中...';
+  enterBtn.disabled = true;
+
+  // Workerにパスワード照合を投げる（HTMLにパスワードは書かない）
+  fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'check_password', password: pw })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) {
+      unlocked = true;
+      localStorage.setItem('tabi_unlocked', '1');
+      closeGate();
+      analyze();
+    } else {
+      errEl.style.display = 'block';
+    }
+  })
+  .catch(() => {
+    errEl.textContent = '通信エラーが発生しました。再度お試しください。';
+    errEl.style.display = 'block';
+  })
+  .finally(() => {
+    enterBtn.textContent = '入室して利用を開始する';
+    enterBtn.disabled = false;
+  });
 }
 
 document.getElementById('gatePw').addEventListener('keydown', function(e) {
