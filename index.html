@@ -4,24 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>たびみっけ Global｜写真で調べる旅の歴史と見どころ</title>
-
-<!-- ファビコン -->
-<link rel="icon" href="favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="favicon.png">
-
-<!-- OGP（SNSシェア用） -->
-<meta property="og:title" content="たびみっけ Global｜写真で調べる旅の歴史と見どころ">
-<meta property="og:description" content="写真を撮るだけで、その場所の歴史と見どころがわかる。3言語対応の旅のAIアシスタント。">
-<meta property="og:image" content="https://spc-jp.github.io/tabi-mikke/ogp.png">
-<meta property="og:url" content="https://spc-jp.github.io/tabi-mikke/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="たびみっけ Global">
-
-<!-- Twitterカード（X対応） -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="たびみっけ Global｜写真で調べる旅の歴史と見どころ">
-<meta name="twitter:description" content="写真を撮るだけで、その場所の歴史と見どころがわかる。">
-<meta name="twitter:image" content="https://spc-jp.github.io/tabi-mikke/ogp.png">
 <style>
   :root {
     --main:      #F07799;
@@ -458,11 +440,11 @@
     <div class="gate-icon">🔒</div>
     <div class="gate-title">ご利用にはパスワードが必要です</div>
     <div class="gate-desc">
-      たびみっけ Globalは月額980円のサービスです。<br>
-      ご購入後にパスワードをお届けします。
+      たびみっけ Globalは買い切り¥1,980のサービスです。<br>
+      一度のお支払いでずっとご利用いただけます。
     </div>
     <a id="stripeBtn" href="#" target="_blank" class="gate-stripe-btn">
-      🔒 安全なStripeで購入する（月額980円）
+      🔒 安全なStripeで購入する（買い切り¥1,980）
     </a>
     <div class="gate-divider">すでにパスワードをお持ちの方</div>
     <div class="gate-err" id="gateErr">パスワードが違います</div>
@@ -497,9 +479,10 @@
 
   <!-- 言語切替 -->
   <div class="lang-bar">
-    <button class="lang-btn active" id="lang-ja" onclick="setLang('ja')">🇯🇵 日本語</button>
-    <button class="lang-btn"        id="lang-en" onclick="setLang('en')">🇺🇸 English</button>
-    <button class="lang-btn"        id="lang-zh" onclick="setLang('zh')">🇨🇳 中文</button>
+    <button class="lang-btn" id="lang-ja" onclick="setLang('ja')">🇯🇵 日本語</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')">🇺🇸 English</button>
+    <button class="lang-btn" id="lang-zh" onclick="setLang('zh')">🇨🇳 中文</button>
+    <button class="lang-btn" id="lang-ko" onclick="setLang('ko')">🇰🇷 한국어</button>
   </div>
 
   <!-- 写真 -->
@@ -590,7 +573,7 @@
 <script>
 // ========== 設定 ==========
 const WORKER_URL  = 'https://tabi-mikkehtml.yymmatsu.workers.dev';
-const STRIPE_URL  = 'https://buy.stripe.com/fZu9ASbCWbfn6SP7AUcV20e'; // ← StripeのURLに差し替え
+const STRIPE_URL  = 'https://buy.stripe.com/eVq5kCgXg4QZelh9J2cV20P'; // ← StripeのURLに差し替え
 // APP_PWはWorkerの環境変数APP_PASSWORDで管理（HTMLには書かない）
 const FREE_LIMIT  = 3;
 
@@ -599,7 +582,16 @@ let base64Data    = null;
 let sakuraInterval = null;
 let recognition   = null;
 let isRecording   = false;
-let currentLang   = 'ja';
+// ========== ブラウザ言語自動検出 ==========
+function detectLang() {
+  const browserLang = (navigator.language || navigator.userLanguage || 'ja').toLowerCase();
+  if (browserLang.startsWith('ko')) return 'ko';
+  if (browserLang.startsWith('zh')) return 'zh';
+  if (browserLang.startsWith('en')) return 'en';
+  return 'ja';
+}
+
+let currentLang   = detectLang();
 let currentTheme  = 'blue';
 let resultText    = '';
 let useCount      = parseInt(localStorage.getItem('tabi_use_count') || '0');
@@ -687,6 +679,33 @@ const i18n = {
       { key: '历史背景', icon: '📖' },
       { key: '推荐看点', icon: '⭐' }
     ]
+  },
+  ko: {
+    tagline:     '사진 한 장으로 그 장소의 역사와 볼거리를 알 수 있어요',
+    step1:       '📸 1단계｜사진 선택',
+    upload:      '여기를 탭하여 사진을 선택하세요',
+    uploadSub:   '신사·성·거리·비석 등 무엇이든 OK 🏯',
+    step2:       '✏️ 2단계｜추가 정보（선택사항）',
+    placeholder: '예：교토의 신사입니다 / 에도시대라고 쓰여 있었습니다 / ○○시에 있습니다',
+    hint:        '사진만으로도 OK. 추가 정보가 있으면 더 정확해집니다🌸',
+    btn:         '🔍 이 장소 조사하기',
+    loading:     '📚 역사를 조사하고 있습니다...',
+    loadingSub:  '잠시만 기다려주세요🌸',
+    result:      '🌸 조사 결과',
+    copy:        '복사',
+    copied:      '복사되었습니다！',
+    reset:       '🔄 다른 장소 조사하기',
+    errNoImage:  '먼저 사진을 업로드해주세요 📸',
+    errServer:   '오류가 발생했습니다. 잠시 후 다시 시도해주세요。',
+    errMic:      '이 브라우저는 음성 입력을 지원하지 않습니다。',
+    micStart:    '듣고 있습니다... 다시 탭하면 중지',
+    petals:      ['🌸','🌺','🌷','🌸','🌸'],
+    speechLang:  'ko-KR',
+    sections:    [
+      { key: '장소명',      icon: '📍' },
+      { key: '역사·배경',  icon: '📖' },
+      { key: '추천 포인트', icon: '⭐' }
+    ]
   }
 };
 
@@ -707,7 +726,7 @@ function setLang(lang) {
   document.getElementById('label-result').textContent     = t.result;
   document.getElementById('label-copy').textContent       = t.copy;
   document.getElementById('label-reset').textContent      = t.reset;
-  ['ja','en','zh'].forEach(l => {
+  ['ja','en','zh','ko'].forEach(l => {
     document.getElementById('lang-'+l).classList.toggle('active', l === lang);
   });
 }
@@ -821,6 +840,11 @@ function handleFileSelect(file) {
   };
   reader.readAsDataURL(file);
 }
+
+// ========== ページ読み込み時に言語自動適用 ==========
+window.addEventListener('DOMContentLoaded', function() {
+  setLang(currentLang);
+});
 
 document.getElementById('fileGallery').addEventListener('change', function(e) {
   handleFileSelect(e.target.files[0]);
@@ -972,7 +996,20 @@ Reply in English only. No markdown. Use ◆ only.
 ◆ 推荐看点
 ・（看点1）
 ・（看点2）
-・（看点3）`
+・（看点3）`,
+
+      ko: `이 사진에 찍힌 장소를 조사해 주세요。${userText ? ' 추가정보：' + userText : ''}
+한국어로만 답변해 주세요。Markdown 금지。◆ 기호만 사용。
+
+◆ 장소명（추정）
+◆ 역사·배경
+（150~200자 정도로 알기 쉽게）
+◆ 추천 포인트
+・（볼거리 1）
+・（볼거리 2）
+・（볼거리 3）
+
+불확실한 경우 「~로 추정됩니다」라고 덧붙여 주세요。`
     };
 
     try {
